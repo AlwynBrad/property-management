@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alwyn.propertymanagement.dto.UserDTO;
+import com.alwyn.propertymanagement.exception.BusinessException;
 import com.alwyn.propertymanagement.service.UserService;
 
 @RestController
@@ -19,8 +20,14 @@ public class UserController {
     private UserService userService;
 
       @PostMapping("/register")
-    public ResponseEntity<UserDTO> saveProperty(@RequestBody UserDTO userDTO){
+      public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) throws BusinessException{
         userDTO = userService.register(userDTO);
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserDTO> login(@RequestBody UserDTO userDTO) throws BusinessException{
+        userDTO = userService.login(userDTO.getOwnerEmail(), userDTO.getPassword());
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 }
