@@ -12,6 +12,8 @@ import com.alwyn.propertymanagement.dto.UserDTO;
 import com.alwyn.propertymanagement.exception.BusinessException;
 import com.alwyn.propertymanagement.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 
 @RestController
@@ -22,12 +24,14 @@ public class UserController {
     private UserService userService;
 
       @PostMapping("/register")
-      public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO userDTO) throws BusinessException{
+      public ResponseEntity<UserDTO> register(@Parameter(
+        name = "userDTO", example = "user information", required = true) 
+        @Valid @RequestBody UserDTO userDTO) throws BusinessException{
         userDTO = userService.register(userDTO);
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
+    @PostMapping(path = "/login", consumes = {"application/json"}, produces = {"application/json"} )
     public ResponseEntity<UserDTO> login(@Valid @RequestBody UserDTO userDTO) throws BusinessException{
         userDTO = userService.login(userDTO.getOwnerEmail(), userDTO.getPassword());
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
