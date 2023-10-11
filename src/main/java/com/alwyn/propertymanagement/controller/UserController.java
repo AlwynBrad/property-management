@@ -12,6 +12,8 @@ import com.alwyn.propertymanagement.dto.UserDTO;
 import com.alwyn.propertymanagement.exception.BusinessException;
 import com.alwyn.propertymanagement.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
@@ -20,13 +22,13 @@ public class UserController {
     private UserService userService;
 
       @PostMapping("/register")
-      public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) throws BusinessException{
+      public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO userDTO) throws BusinessException{
         userDTO = userService.register(userDTO);
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDTO> login(@RequestBody UserDTO userDTO) throws BusinessException{
+    public ResponseEntity<UserDTO> login(@Valid @RequestBody UserDTO userDTO) throws BusinessException{
         userDTO = userService.login(userDTO.getOwnerEmail(), userDTO.getPassword());
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
