@@ -12,7 +12,6 @@ import com.alwyn.propertymanagement.dto.UserDTO;
 import com.alwyn.propertymanagement.exception.BusinessException;
 import com.alwyn.propertymanagement.service.UserService;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 

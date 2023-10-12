@@ -1,6 +1,7 @@
 package com.alwyn.propertymanagement.controller;
 
 import com.alwyn.propertymanagement.dto.PropertyDTO;
+import com.alwyn.propertymanagement.exception.BusinessException;
 import com.alwyn.propertymanagement.service.PropertyService;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class PropertyController {
         return "Hello ";
     }
     @PostMapping("/properties")
-    public ResponseEntity<PropertyDTO> saveProperty(@RequestBody PropertyDTO propertyDTO){
+    public ResponseEntity<PropertyDTO> saveProperty(@RequestBody PropertyDTO propertyDTO) throws BusinessException{
         propertyDTO = propertyService.saveProperty(propertyDTO);
         return new ResponseEntity<>(propertyDTO, HttpStatus.CREATED);
     }
@@ -37,6 +38,13 @@ public class PropertyController {
     @GetMapping("/properties")
     public ResponseEntity<List<PropertyDTO>> getAllProperties(){
         List<PropertyDTO> propertyList= propertyService.getAllProperties();
+        return new ResponseEntity<>(propertyList, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/properties/users/{userId}")
+    public ResponseEntity<List<PropertyDTO>> getAllPropertiesForUser(@PathVariable("userId") Long userId){
+        List<PropertyDTO> propertyList= propertyService.getAllPropertiesForUser(userId);
         return new ResponseEntity<>(propertyList, HttpStatus.OK);
 
     }
