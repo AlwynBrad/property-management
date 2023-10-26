@@ -1,11 +1,11 @@
 package com.alwyn.propertymanagement.service.impl;
 
-import com.alwyn.propertymanagement.convertor.PropertyConvertor;
 import com.alwyn.propertymanagement.dto.PropertyDTO;
 import com.alwyn.propertymanagement.entity.PropertyEntity;
 import com.alwyn.propertymanagement.entity.UserEntity;
 import com.alwyn.propertymanagement.exception.BusinessException;
 import com.alwyn.propertymanagement.exception.ErrorModel;
+import com.alwyn.propertymanagement.mapper.PropertyMapper;
 import com.alwyn.propertymanagement.repository.PropertyRepository;
 import com.alwyn.propertymanagement.repository.UserRepository;
 import com.alwyn.propertymanagement.service.PropertyService;
@@ -24,9 +24,6 @@ public class PropertyServiceImpl implements PropertyService {
     private PropertyRepository propertyRepository;
 
     @Autowired
-    private PropertyConvertor propertyConvertor;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Override
@@ -34,10 +31,9 @@ public class PropertyServiceImpl implements PropertyService {
 
         Optional<UserEntity> optUe = userRepository.findById(propertyDTO.getUserId());
         if (optUe.isPresent()) {
-            PropertyEntity pe = propertyConvertor.convertDTOtoEntity(propertyDTO);
-            pe.setUserEntity(optUe.get());
+            PropertyEntity pe = PropertyMapper.INSTANCE.dtoToEntity(propertyDTO);
             pe = propertyRepository.save(pe);
-            propertyDTO = propertyConvertor.convertEntitytoDTO(pe);
+            propertyDTO = PropertyMapper.INSTANCE.entityToDTO(pe);
         }else{
 
             List<ErrorModel> errorModelList = new ArrayList<>();
@@ -57,7 +53,7 @@ public class PropertyServiceImpl implements PropertyService {
         List<PropertyEntity> listOFProperties = (List<PropertyEntity>) propertyRepository.findAll();
         List<PropertyDTO> propList = new ArrayList<>();
         for (PropertyEntity pe : listOFProperties) {
-            PropertyDTO dto = propertyConvertor.convertEntitytoDTO(pe);
+            PropertyDTO dto = PropertyMapper.INSTANCE.entityToDTO(pe);
             propList.add(dto);
         }
         return propList;
@@ -69,7 +65,7 @@ public class PropertyServiceImpl implements PropertyService {
         List<PropertyEntity> listOFProperties = propertyRepository.findAllByUserEntityId(userId);
         List<PropertyDTO> propList = new ArrayList<>();
         for (PropertyEntity pe : listOFProperties) {
-            PropertyDTO dto = propertyConvertor.convertEntitytoDTO(pe);
+            PropertyDTO dto = PropertyMapper.INSTANCE.entityToDTO(pe);
             propList.add(dto);
         }
         return propList;
@@ -89,7 +85,7 @@ public class PropertyServiceImpl implements PropertyService {
             pe.setPrice(propertyDTO.getPrice());
 
             propertyRepository.save(pe);
-            dto = propertyConvertor.convertEntitytoDTO(pe);
+            dto = PropertyMapper.INSTANCE.entityToDTO(pe);
         }
         return dto;
         
@@ -104,7 +100,7 @@ public class PropertyServiceImpl implements PropertyService {
             PropertyEntity pe = optEn.get();
             pe.setDescription(propertyDTO.getDescription());
 
-            dto = propertyConvertor.convertEntitytoDTO(pe);
+            dto = PropertyMapper.INSTANCE.entityToDTO(pe);
             propertyRepository.save(pe);
         }
         return dto;
@@ -120,7 +116,7 @@ public class PropertyServiceImpl implements PropertyService {
             PropertyEntity pe = optEn.get();
             pe.setPrice(propertyDTO.getPrice());
 
-            dto = propertyConvertor.convertEntitytoDTO(pe);
+            dto = PropertyMapper.INSTANCE.entityToDTO(pe);
             propertyRepository.save(pe);
         }
         return dto;
