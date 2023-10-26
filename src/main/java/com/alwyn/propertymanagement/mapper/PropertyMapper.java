@@ -13,7 +13,7 @@ public interface PropertyMapper{
     PropertyMapper INSTANCE = Mappers.getMapper(PropertyMapper.class);
 
     @Mapping( target = "id", ignore = true)
-    @Mapping(target = "userEntity", ignore = true)
+    @Mapping(source = "userId", target = "userEntity.id")
     PropertyEntity dtoToEntity(PropertyDTO propertyDTO);
 
     @Mapping(source = "userEntity.id", target = "userId")

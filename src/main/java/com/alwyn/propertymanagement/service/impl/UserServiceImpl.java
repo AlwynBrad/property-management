@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.alwyn.propertymanagement.dto.UserDTO;
@@ -26,6 +27,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public UserDTO register(UserDTO userDTO) throws BusinessException {
 
@@ -40,6 +44,8 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(errorModelList);
         }
         UserEntity userEntity = UserMapper.INSTANCE.dtoToEntity(userDTO);
+
+        userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userEntity = userRepository.save(userEntity);
 
         AddressEntity addressEntity = new AddressEntity();
@@ -60,8 +66,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO login(String email, String password) throws BusinessException {
         UserDTO userDTO = null;
-        Optional<UserEntity> optionalUserEntity = userRepository.findByOwnerEmailAndPassword(email, password);
-        if (optionalUserEntity.isPresent()) {
+        Optional<UserEntity> optionalUserEntity = userRepository.findByOwnerEmail(email);
+        if (optionalUserEntity.isPresent() && optionalUserEntity.get().getOwnerEmail().equals(email) && passwordEncoder.matches(password, optionalUserEntity.get().getPassword())) {
             userDTO = UserMapper.INSTANCE.entityToDTO(optionalUserEntity.get());            
         }
         else{
