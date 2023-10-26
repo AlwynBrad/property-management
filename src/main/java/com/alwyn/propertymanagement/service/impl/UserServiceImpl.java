@@ -7,11 +7,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alwyn.propertymanagement.convertor.UserConvertor;
 import com.alwyn.propertymanagement.dto.UserDTO;
+import com.alwyn.propertymanagement.entity.AddressEntity;
 import com.alwyn.propertymanagement.entity.UserEntity;
 import com.alwyn.propertymanagement.exception.BusinessException;
 import com.alwyn.propertymanagement.exception.ErrorModel;
+import com.alwyn.propertymanagement.mapper.UserMapper;
+import com.alwyn.propertymanagement.repository.AddressRepository;
 import com.alwyn.propertymanagement.repository.UserRepository;
 import com.alwyn.propertymanagement.service.UserService;
 
@@ -22,7 +24,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private UserConvertor userConvertor;
+    private AddressRepository addressRepository;
 
     @Override
     public UserDTO register(UserDTO userDTO) throws BusinessException {
@@ -37,9 +39,21 @@ public class UserServiceImpl implements UserService {
 
             throw new BusinessException(errorModelList);
         }
-        UserEntity userEntity = userConvertor.convertDTOtoEntity(userDTO);
+        UserEntity userEntity = UserMapper.INSTANCE.dtoToEntity(userDTO);
         userEntity = userRepository.save(userEntity);
-        userDTO = userConvertor.convertEntitytoDTO(userEntity);
+
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setHouseNo(userDTO.getHouseNo());
+        addressEntity.setStreet(userDTO.getStreet());
+        addressEntity.setCity(userDTO.getCity());
+        addressEntity.setState(userDTO.getState());
+        addressEntity.setPostalCode(userDTO.getPostalCode());
+        addressEntity.setCountry(userDTO.getCountry());
+        addressEntity.setUserEntity(userEntity);
+
+        addressRepository.save(addressEntity);
+
+        userDTO = UserMapper.INSTANCE.entityToDTO(userEntity);
         return userDTO;        
     }
 
@@ -48,7 +62,7 @@ public class UserServiceImpl implements UserService {
         UserDTO userDTO = null;
         Optional<UserEntity> optionalUserEntity = userRepository.findByOwnerEmailAndPassword(email, password);
         if (optionalUserEntity.isPresent()) {
-            userDTO = userConvertor.convertEntitytoDTO(optionalUserEntity.get());            
+            userDTO = UserMapper.INSTANCE.entityToDTO(optionalUserEntity.get());            
         }
         else{
 
@@ -61,6 +75,17 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(errorModelList);
         }
     return userDTO;
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        List<UserEntity> listOfUsers = (List<UserEntity>)userRepository.findAll();
+        List<UserDTO> userList = new ArrayList<>(); 
+        for (UserEntity ue : listOfUsers) {
+            UserDTO dto = UserMapper.INSTANCE.entityToDTO(ue);
+            userList.add(dto);
+        }
+        return userList;
     }
     
 }
