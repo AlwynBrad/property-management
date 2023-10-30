@@ -5,17 +5,21 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.alwyn.propertymanagement.dto.UserDTO;
 import com.alwyn.propertymanagement.entity.AddressEntity;
 import com.alwyn.propertymanagement.entity.UserEntity;
+import com.alwyn.propertymanagement.enums.Role;
 import com.alwyn.propertymanagement.exception.BusinessException;
 import com.alwyn.propertymanagement.exception.ErrorModel;
 import com.alwyn.propertymanagement.mapper.UserMapper;
 import com.alwyn.propertymanagement.repository.AddressRepository;
 import com.alwyn.propertymanagement.repository.UserRepository;
+import com.alwyn.propertymanagement.security.JwtService;
 import com.alwyn.propertymanagement.service.UserService;
+import com.nimbusds.jose.JOSEException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,8 +30,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtService jwtService;
+
     @Override
-    public UserDTO register(UserDTO userDTO) throws BusinessException {
+    public UserDTO register(UserDTO userDTO) throws BusinessException, JOSEException {
 
         Optional<UserEntity> optUe = userRepository.findByOwnerEmail(userDTO.getOwnerEmail());
         if (optUe.isPresent()) {
@@ -40,6 +50,9 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(errorModelList);
         }
         UserEntity userEntity = UserMapper.INSTANCE.dtoToEntity(userDTO);
+
+        userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        userEntity.setRole(Role.USER);
         userEntity = userRepository.save(userEntity);
 
         AddressEntity addressEntity = new AddressEntity();
@@ -54,15 +67,22 @@ public class UserServiceImpl implements UserService {
         addressRepository.save(addressEntity);
 
         userDTO = UserMapper.INSTANCE.entityToDTO(userEntity);
+
+        String jwtToken = jwtService.generateJwtToken(userDTO.getOwnerEmail());
+        userDTO.setToken(jwtToken);
+
         return userDTO;        
     }
 
     @Override
-    public UserDTO login(String email, String password) throws BusinessException {
+    public UserDTO login(String email, String password) throws BusinessException, JOSEException {
         UserDTO userDTO = null;
-        Optional<UserEntity> optionalUserEntity = userRepository.findByOwnerEmailAndPassword(email, password);
-        if (optionalUserEntity.isPresent()) {
-            userDTO = UserMapper.INSTANCE.entityToDTO(optionalUserEntity.get());            
+        Optional<UserEntity> optionalUserEntity = userRepository.findByOwnerEmail(email);
+        if (optionalUserEntity.isPresent() && optionalUserEntity.get().getOwnerEmail().equals(email) && passwordEncoder.matches(password, optionalUserEntity.get().getPassword())) {
+            userDTO = UserMapper.INSTANCE.entityToDTO(optionalUserEntity.get());
+            
+            String jwtToken = jwtService.generateJwtToken(email);
+            userDTO.setToken(jwtToken);            
         }
         else{
 
@@ -79,7 +99,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> getAllUsers() {
-        List<UserEntity> listOfUsers = (List<UserEntity>)userRepository.findAll();
+        List<UserEntity> listOfUsers = userRepository.findAll();
         List<UserDTO> userList = new ArrayList<>(); 
         for (UserEntity ue : listOfUsers) {
             UserDTO dto = UserMapper.INSTANCE.entityToDTO(ue);

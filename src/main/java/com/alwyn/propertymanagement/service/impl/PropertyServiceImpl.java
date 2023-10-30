@@ -28,25 +28,23 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public PropertyDTO saveProperty(PropertyDTO propertyDTO) throws BusinessException {
-
         Optional<UserEntity> optUe = userRepository.findById(propertyDTO.getUserId());
         if (optUe.isPresent()) {
             PropertyEntity pe = PropertyMapper.INSTANCE.dtoToEntity(propertyDTO);
             pe = propertyRepository.save(pe);
             propertyDTO = PropertyMapper.INSTANCE.entityToDTO(pe);
-        }else{
-
+        } else {
             List<ErrorModel> errorModelList = new ArrayList<>();
             ErrorModel errorModel = new ErrorModel();
             errorModel.setCode("NO_USER");
-            errorModel.setMessage("The give user does not exist");
+            errorModel.setMessage("The given user does not exist");
             errorModelList.add(errorModel);
 
             throw new BusinessException(errorModelList);
         }
         return propertyDTO;
-        
     }
+
 
     @Override
     public List<PropertyDTO> getAllProperties() {
