@@ -17,9 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 public class PropertyController {
 
-    @Value("${pms.dummy:}")
-    private String dummy;
-
     @Value("${spring.datasource.url:}")
     private String dbURL;
 
