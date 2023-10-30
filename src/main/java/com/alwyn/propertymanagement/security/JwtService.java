@@ -3,7 +3,7 @@ import java.security.Key;
 import java.text.ParseException;
 import java.util.Date;
 
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,8 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    private static String secretKey = "6d90fe4dc667c98cc034ae3548a7429f081941616c8b44e6e56f42a47ba15327";
+    @Value("${SECRET_KEY}")
+    private String secretKey;
 
 
     private Key getSigningKey() {
