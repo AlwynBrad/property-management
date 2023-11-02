@@ -29,11 +29,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/secured")
-    public String secured(Authentication authentication){
-        return "Hello " + authentication.getName() + "from secured end point ";
-    }
-
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@Parameter(
         name = "userDTO", example = "user information", required = true) 
