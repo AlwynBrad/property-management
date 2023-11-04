@@ -25,10 +25,10 @@ public class UserDTO {
     private String password;
     private String token;
 
-    private String houseNo;
+    private Integer houseNo;
     private String street;
     private String city;
     private String state;
-    private Long postalCode;
+    private Integer postalCode;
     private String country;
 }
