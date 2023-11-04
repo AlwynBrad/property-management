@@ -21,11 +21,11 @@ public class AddressEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String houseNo;
+    private Integer houseNo;
     private String street;
     private String city;
     private String state;
-    private Long postalCode;
+    private Integer postalCode;
     private String country;
 
     @OneToOne

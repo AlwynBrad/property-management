@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -38,8 +39,7 @@ public class SecurityConfig{
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(new MvcRequestMatcher(handlerMappingIntrospector, "/api/v1/user/register")).permitAll() 
                 .requestMatchers(new MvcRequestMatcher(handlerMappingIntrospector, "/api/v1/user/login")).permitAll()
-                .requestMatchers(new MvcRequestMatcher(handlerMappingIntrospector, "/h2-console/**")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/api/v1/user/**")).authenticated()
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).authenticated()
                 .anyRequest().authenticated()
                 )
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -47,5 +47,10 @@ public class SecurityConfig{
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers(new AntPathRequestMatcher("/h2-console/**"));
     }
 }

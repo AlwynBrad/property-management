@@ -44,13 +44,13 @@ class UserControllerTest {
         UserDTO userDTO2 = new UserDTO();
         userDTO2.setCity("Oxford");
         userDTO2.setCountry("GB");
-        userDTO2.setHouseNo("House No");
+        userDTO2.setHouseNo(72);
         userDTO2.setId(1L);
         userDTO2.setOwnerEmail("jane.doe@example.org");
         userDTO2.setOwnerName("Owner Name");
         userDTO2.setPassword("iloveyou");
         userDTO2.setPhone("6625550144");
-        userDTO2.setPostalCode(1L);
+        userDTO2.setPostalCode(613205);
         userDTO2.setState("MD");
         userDTO2.setStreet("Street");
         userDTO2.setToken("ABC123");
@@ -59,13 +59,13 @@ class UserControllerTest {
         UserDTO userDTO3 = new UserDTO();
         userDTO3.setCity("Oxford");
         userDTO3.setCountry("GB");
-        userDTO3.setHouseNo("House No");
+        userDTO3.setHouseNo(65);
         userDTO3.setId(1L);
         userDTO3.setOwnerEmail("jane.doe@example.org");
         userDTO3.setOwnerName("Owner Name");
         userDTO3.setPassword("iloveyou");
         userDTO3.setPhone("6625550144");
-        userDTO3.setPostalCode(1L);
+        userDTO3.setPostalCode(613008);
         userDTO3.setState("MD");
         userDTO3.setStreet("Street");
         userDTO3.setToken("ABC123");
@@ -81,8 +81,8 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
                                 "{\"id\":1,\"ownerName\":\"Owner Name\",\"ownerEmail\":\"jane.doe@example.org\",\"phone\":\"6625550144\",\"password\""
-                                        + ":\"iloveyou\",\"token\":\"ABC123\",\"houseNo\":\"House No\",\"street\":\"Street\",\"city\":\"Oxford\",\"state\":\"MD\","
-                                        + "\"postalCode\":1,\"country\":\"GB\"}"));
+                                + ":\"iloveyou\",\"token\":\"ABC123\",\"houseNo\":72,\"street\":\"Street\",\"city\":\"Oxford\",\"state\":\"MD\","
+                                + "\"postalCode\":613205,\"country\":\"GB\"}"));
     }
 
     /**
@@ -93,13 +93,13 @@ class UserControllerTest {
         UserDTO userDTO2 = new UserDTO();
         userDTO2.setCity("Oxford");
         userDTO2.setCountry("GB");
-        userDTO2.setHouseNo("House No");
+        userDTO2.setHouseNo(72);
         userDTO2.setId(1L);
         userDTO2.setOwnerEmail("jane.doe@example.org");
         userDTO2.setOwnerName("Owner Name");
         userDTO2.setPassword("iloveyou");
         userDTO2.setPhone("6625550144");
-        userDTO2.setPostalCode(1L);
+        userDTO2.setPostalCode(613205);
         userDTO2.setState("MD");
         userDTO2.setStreet("Street");
         userDTO2.setToken("ABC123");
@@ -108,13 +108,13 @@ class UserControllerTest {
         UserDTO userDTO3 = new UserDTO();
         userDTO3.setCity("Oxford");
         userDTO3.setCountry("GB");
-        userDTO3.setHouseNo("House No");
+        userDTO3.setHouseNo(65);
         userDTO3.setId(1L);
         userDTO3.setOwnerEmail("jane.doe@example.org");
         userDTO3.setOwnerName("Owner Name");
         userDTO3.setPassword("iloveyou");
         userDTO3.setPhone("6625550144");
-        userDTO3.setPostalCode(1L);
+        userDTO3.setPostalCode(613008);
         userDTO3.setState("MD");
         userDTO3.setStreet("Street");
         userDTO3.setToken("ABC123");
@@ -130,8 +130,8 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
                                 "{\"id\":1,\"ownerName\":\"Owner Name\",\"ownerEmail\":\"jane.doe@example.org\",\"phone\":\"6625550144\",\"password\""
-                                        + ":\"iloveyou\",\"token\":\"ABC123\",\"houseNo\":\"House No\",\"street\":\"Street\",\"city\":\"Oxford\",\"state\":\"MD\","
-                                        + "\"postalCode\":1,\"country\":\"GB\"}"));
+                                + ":\"iloveyou\",\"token\":\"ABC123\",\"houseNo\":72,\"street\":\"Street\",\"city\":\"Oxford\",\"state\":\"MD\","
+                                + "\"postalCode\":613205,\"country\":\"GB\"}"));
     }
 
     /**
