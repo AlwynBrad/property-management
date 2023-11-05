@@ -1,3 +1,4 @@
+// This code defines a controller class called UserController, which handles HTTP requests related to user operations in the application.
 package com.alwyn.propertymanagement.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+     // Define a POST endpoint for user registration.
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@Parameter(
         name = "userDTO", example = "user information", required = true) 
@@ -36,12 +38,14 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
+     // Define a POST endpoint for user login.
     @PostMapping(path = "/login", consumes = {"application/json"}, produces = {"application/json"} )
     public ResponseEntity<UserDTO> login(@Valid @RequestBody UserDTO userDTO) throws BusinessException, JOSEException{
         userDTO = userService.login(userDTO.getOwnerEmail(), userDTO.getPassword());
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
+     // Define a GET endpoint to retrieve a list of all users.
     @GetMapping("/getAll")
     public ResponseEntity<List<UserDTO>> getAllUsers(){
         List<UserDTO> usersList = userService.getAllUsers();

@@ -17,8 +17,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class AddressEntity {
+    
 
-    @Id
+     // Specifies that the primary key value should be automatically generated using an identity column in the database.
+    @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer houseNo;

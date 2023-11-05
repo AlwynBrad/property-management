@@ -25,17 +25,23 @@ public class ApplicationConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        
+        // Define and return a password encoder bean using BCrypt encoding.
         return new BCryptPasswordEncoder();
     }
     
     @Bean
     public UserDetailsService userDetailsService(){
+
+        // Define a custom user details service that retrieves user information from the UserRepository.
         return username -> userRepository.findByOwnerEmail(username)
             .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
+
+        // Create and configure an AuthenticationProvider that uses the custom user details service and password encoder.
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -44,6 +50,8 @@ public class ApplicationConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
+
+        // Define and create an AuthenticationManager bean based on the provided AuthenticationConfiguration.
         return config.getAuthenticationManager();
     }
 }

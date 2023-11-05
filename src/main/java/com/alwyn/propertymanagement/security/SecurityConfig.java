@@ -32,13 +32,18 @@ public class SecurityConfig{
         return new HandlerMappingIntrospector();
     }
 
+    // SecurityFilterChain bean defines the security configuration.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http 
             .csrf(conf -> conf.disable())
             .authorizeHttpRequests(auth -> auth
+
+            // Permit all access to registration and login endpoints.
                 .requestMatchers(new MvcRequestMatcher(handlerMappingIntrospector, "/api/v1/user/register")).permitAll() 
                 .requestMatchers(new MvcRequestMatcher(handlerMappingIntrospector, "/api/v1/user/login")).permitAll()
+
+                // Require authentication for all other API endpoints under "/api/v1/".
                 .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).authenticated()
                 .anyRequest().authenticated()
                 )
@@ -49,6 +54,7 @@ public class SecurityConfig{
         return http.build();
     }
 
+     // WebSecurityCustomizer bean configures security for specific paths.
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers(new AntPathRequestMatcher("/h2-console/**"));
