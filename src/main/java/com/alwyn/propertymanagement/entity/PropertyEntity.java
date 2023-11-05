@@ -22,6 +22,8 @@ import lombok.Setter;
 public class PropertyEntity {
 
     @Id
+
+    // Specifies that the primary key value should be automatically generated using an identity column in the database.
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "PROPERTY_TITLE")
@@ -29,8 +31,15 @@ public class PropertyEntity {
     private String description;
     private Double price;
     private String address;
+
+     // Establish a many-to-one relationship with the UserEntity class.
     
     @ManyToOne(fetch = FetchType.LAZY) // FetchType.LAZY => to fetch the property data excluding user data
+
+     // Define the foreign key column that associates a property with a user.
+
+     // The 'USER_ID' column in 'PROPERTY_TABLE' references the primary key of the 'UserEntity' table.
+
     @JoinColumn(name = "USER_ID", nullable = false)
     private UserEntity userEntity;
 }

@@ -23,6 +23,7 @@ public class JwtService {
 
     @Value("${SECRET_KEY}")
     private String secretKey;
+    // Method to obtain the signing key from the provided secret key.
 
 
     private Key getSigningKey() {
@@ -30,6 +31,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
+    // Generate a JWT token for the given subject (user) with a specific expiration time.
     public String generateJwtToken(String subject) throws JOSEException {
         try {
             Key signingKey = getSigningKey();
@@ -58,6 +60,7 @@ public class JwtService {
         }
     }
 
+    // Extract the username (subject) from a JWT token.
     public String extractUsername(String token) throws JOSEException {
         try {
             Key signingKey = getSigningKey();
@@ -66,10 +69,12 @@ public class JwtService {
 
             JWSVerifier verifier = new MACVerifier(signingKey.getEncoded());
 
+            // Verify the JWT token's signature.
             if (!signedJWT.verify(verifier)) {
                 throw new JOSEException("JWT verification failed");
             }
 
+            // Get the claims from the JWT and return the subject (username).
             JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
             return claims.getSubject();
         } catch (ParseException e) {
@@ -77,15 +82,18 @@ public class JwtService {
         }
     }
 
+     // Check if a JWT token is valid for a given user's details.
     public boolean isTokenValid(String token, UserDetails userDetails) throws JOSEException{
         String userName = extractUsername(token);
         return userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
+    // Check if a JWT token is expired by comparing its expiration time with the current time.
     private boolean isTokenExpired(String token) throws JOSEException {
         return extractExpiration(token).before(new Date());
     }
 
+    // Extract the expiration time from a JWT token's claims.
     private Date extractExpiration(String token) throws JOSEException {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);

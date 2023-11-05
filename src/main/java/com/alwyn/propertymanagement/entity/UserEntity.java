@@ -1,5 +1,7 @@
 package com.alwyn.propertymanagement.entity;
 
+
+
 import java.util.Collection;
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class UserEntity implements UserDetails{
     private Role role;
 
 
+     // Implementation of UserDetails interface methods
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
      return List.of(new SimpleGrantedAuthority(role.name()));
