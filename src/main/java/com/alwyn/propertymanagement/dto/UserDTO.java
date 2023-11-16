@@ -13,10 +13,8 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO {
 
-     // The unique identifier for a user.
     private Long id;
 
-    // The name of the user.
     private String ownerName;
 
     // Validation annotations for the user's email.
