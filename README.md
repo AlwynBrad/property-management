@@ -25,7 +25,6 @@ Clone the PMS backend repository to your local machine using the following comma
 
 ```
     git clone https://github.com/AlwynBrad/property-management.git
-
 ```
    
   
@@ -43,7 +42,6 @@ Clone the PMS backend repository to your local machine using the following comma
 + Build the project using Maven by running the following command in the terminal:
 ```
     mvn clean install
-
 ```
 + Or Reload the Maven project in your IDE to ensure dependencies are resolved.
 + Run the application by executing the main class, named PropertyManagementApplication.java, or use the IDE's run configuration.
@@ -69,6 +67,7 @@ Clone the PMS backend repository to your local machine using the following comma
 
 ### Contributing
 If you would like to contribute to this project, please feel free to do so.
+
 
 ### License
 This project is licensed under the MIT License.
