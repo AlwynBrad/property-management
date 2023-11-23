@@ -53,7 +53,6 @@ Clone the PMS backend repository to your local machine using the following comma
 
 + Once the application is running, you can access the defined API endpoints to interact with the Property Management System.
 + Use a tool like Postman to conveniently test and interact with the API endpoints. Import the provided Postman collection file for easy setup.
-+ Refer to the API Endpoints section in the README for details on available operations.
 
 
 **Explore API Documentation:**
