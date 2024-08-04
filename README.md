@@ -58,7 +58,7 @@ Clone the PMS backend repository to your local machine using the following comma
 **Explore API Documentation:**
 
 + Explore the API documentation using Swagger.
-+ Access the Swagger UI by navigating to http://localhost:8080/swagger-ui.html in your web browser.
++ After the application is up and running, access the Swagger UI by navigating to http://localhost:8080/swagger-ui.html in your web browser.
 + The Swagger documentation provides detailed information about available endpoints and how to use them.
 
 
